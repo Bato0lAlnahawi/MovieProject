@@ -9,6 +9,7 @@ const Movie = new Schema(
   description: { type: String },
   genre: { type: [String] , required:true },
   releaseDate: { type: Date , required: true },
+  adminID:{type: Number , required: true},
  },
  { timestamps: true },
 )
