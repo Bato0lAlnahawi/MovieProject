@@ -8,6 +8,7 @@ const apiPort= 3000;
 
 const db = require('./models/db');
 const MovieRouter= require('./routes/movieRouter');
+const UserRouter= require('./routes/userRouter');
 //db().catch(err => console.log(err));
 
 
@@ -22,4 +23,5 @@ app.get('/', (req , res) => {
      })
 
 app.use('/api' ,MovieRouter) ;
+app.use('/api' ,UserRouter) ;
 app.listen(apiPort, () => console.log(`Server running on port ${apiPort}`))
