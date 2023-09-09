@@ -1,10 +1,10 @@
 const express = require('express');
 
-const MovieCtrl = require('../controllers/user-ctrl');
+const userCrtl = require('../controllers/user-ctrl');
 
 const router = express.Router();
 
-//router.post();
+router.post('/register', userCrtl.register);
 
 
 module.exports = router;
