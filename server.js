@@ -4,11 +4,12 @@ const cors = require('cors');
 const bodyParser =require('body-parser');
 
 const app = express();
-const apiPort= 8080;
+const apiPort= 3000;
 
 const db = require('./models/db');
 const MovieRouter= require('./routes/movieRouter');
 const UserRouter= require('./routes/userRouter');
+const ReviewRouter = require('./routes/reviewRouter');
 //db().catch(err => console.log(err));
 
 
@@ -24,4 +25,5 @@ app.get('/', (req , res) => {
 
 app.use('/api' ,MovieRouter) ;
 app.use('/api' ,UserRouter) ;
+app.use('/api' ,ReviewRouter) ;
 app.listen(apiPort, () => console.log(`Server running on port ${apiPort}`))

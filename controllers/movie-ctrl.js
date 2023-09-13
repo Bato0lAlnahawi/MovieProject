@@ -2,23 +2,23 @@ const Movie = require('../models/movieModel')
 
 //Create Movie ...
 createMovie = (req, res) => {
+  console.log('Received POST request at /api/movie');
+ const body = req.body
 
-const body = req.body
+ if (!body) {
+  return res.status(400).json({
+   success: false,
+   error: 'You must provide a movie',
+ })
+ }
 
-if (!body) {
-return res.status(400).json({
-success: false,
-error: 'You must provide a movie',
-})
-}
+ const movie = new Movie(body)
 
-const movie = new Movie(body)
+  if (!movie) {
+     return res.status(400).json({ success: false, error: err })
+   }
 
-if (!movie) {
-return res.status(400).json({ success: false, error: err })
-}
-
-movie
+  movie
     .save()
     .then(() => {
         return res.status(201).json({
