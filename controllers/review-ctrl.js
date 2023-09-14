@@ -5,7 +5,7 @@ const User = require('../models/userModel');
 
 
 // Create Review
-const createReview = (req, res) => {
+ createReview = (req, res) => {
     const body = req.body;
   
     if (!body) {
@@ -44,7 +44,7 @@ const createReview = (req, res) => {
   };
   
 // Get Reviews for a Movie
-const getReviewsForMovie = (req, res) => {
+ getReviewsForMovie = (req, res) => {
   const { movieID } = req.params;
 
   Review.find({ movieID }, (err, reviews) => {
@@ -59,7 +59,7 @@ const getReviewsForMovie = (req, res) => {
 };
 
 // Delete Review
-const deleteReview = (req, res) => {
+ deleteReview = (req, res) => {
   const { id } = req.params;
 
   Review.findByIdAndDelete(id, (err, review) => {
@@ -81,9 +81,67 @@ const deleteReview = (req, res) => {
   });
 };
 
+
+//update review
+updateReview = async (req, res) => {
+  const body = req.body;
+
+  if (!body) {
+    return res.status(400).json({
+      success: false,
+      error: 'You must provide a review',
+    });
+  }
+
+  const { id } = req.params;
+  const { rating, comment } = body;
+
+  if (!rating && !comment) {
+    return res.status(400).json({
+      success: false,
+      error: 'Rating or comment is required for update',
+    });
+  }
+
+  Review.findOne({ _id: id }, (err, review) => {
+    if (err) {
+      return res.status(404).json({
+        err,
+        message: 'Review not found!',
+      });
+    }
+
+    if (rating) {
+      review.rating = rating;
+    }
+
+    if (comment) {
+      review.comment = comment;
+    }
+
+    review
+      .save()
+      .then(() => {
+        return res.status(200).json({
+          success: true,
+          id: review._id,
+          message: 'Review updated!',
+        });
+      })
+      .catch((error) => {
+        return res.status(404).json({
+          error,
+          message: 'Review not updated!',
+        });
+      });
+  });
+};
+
+
 module.exports = {
   createReview,
   getReviewsForMovie,
   deleteReview,
+  updateReview,
 };
 
