@@ -109,12 +109,21 @@ getMovieById = async (req, res) => {
     }).catch(err => console.log(err))
     }
 
-    
+//Get All Movies (with both user & admin)
+ getAllMovies = async (req, res) => {
+  try {
+    const movies = await Movie.find();
+    res.status(200).json({ success: true, data: movies });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Server error: Unable to get movies' });
+  }
+};  
  ///////////////////////////
 module.exports = {
   createMovie,
   updateMovie,
   deleteMovie,
-  getMovieById 
+  getMovieById,
+  getAllMovies,
 
 }
