@@ -2,14 +2,18 @@ const express = require('express');
 const path =require('path');
 const cors = require('cors');
 const bodyParser =require('body-parser');
+const dotenv = require('dotenv')
+dotenv.config()
 
 const app = express();
-const apiPort= 3000;
+//const apiPort= process.env.PORT || 3000;
 
 const db = require('./models/db');
 const MovieRouter= require('./routes/movieRouter');
 const UserRouter= require('./routes/userRouter');
 const ReviewRouter = require('./routes/reviewRouter');
+
+//const middleware = require('./middlewares/checkAuthUser')
 //db().catch(err => console.log(err));
 
 
@@ -26,4 +30,4 @@ app.get('/', (req , res) => {
 app.use('/api' ,MovieRouter) ;
 app.use('/api' ,UserRouter) ;
 app.use('/api' ,ReviewRouter) ;
-app.listen(apiPort, () => console.log(`Server running on port ${apiPort}`))
+app.listen(process.env.PORT, () => console.log(`Server running on port ${process.env.PORT}`))
