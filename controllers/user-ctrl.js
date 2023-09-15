@@ -91,4 +91,23 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { register, login };
+const deleteUser = async(req,res)=>{
+  const userID = req.params.id;
+
+  if (userID.length != 24) {
+    return res.status(400).json({
+      message: "Id not valid",
+    })
+  }
+  const user = await User.findOneAndDelete({_id:userID});
+  if (!user) {
+    return res.status(400).json({
+      message: "user not found",
+    })
+  }
+  return res.status(200).json({
+    message: "user deleted",
+  })
+}
+
+module.exports = { register, login,deleteUser };
