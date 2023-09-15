@@ -30,4 +30,6 @@ app.get('/', (req , res) => {
 app.use('/api' ,MovieRouter) ;
 app.use('/api' ,UserRouter) ;
 app.use('/api' ,ReviewRouter) ;
+
+//use "process.env.PORT" instead of "apiPort= 3000"
 app.listen(process.env.PORT, () => console.log(`Server running on port ${process.env.PORT}`))
