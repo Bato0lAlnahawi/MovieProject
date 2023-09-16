@@ -1,142 +1,138 @@
-
-const Review = require('../models/reviewModel');
-const Movie = require('../models/movieModel');
-const User = require('../models/userModel');
-
+const Review = require("../models/reviewModel");
+const { IdValidator } = require("../utils/validator");
+// const Movie = require('../models/movieModel');
+// const User = require('../models/userModel');
 
 // Create Review
- createReview = (req, res) => {
-    const body = req.body;
-  
-    if (!body) {
-      return res.status(400).json({
-        success: false,
-        error: 'You must provide a review',
-      });
-    }
-  
-    const { movieID, userID, rating } = body;
-  
-    if (!movieID || !userID || !rating) {
-      return res.status(400).json({
-        success: false,
-        error: 'movieID, userID, and rating are required',
-      });
-    }
-  
-    const review = new Review({ movieID, userID, rating, comment: body.comment });
-  
-    review
-      .save()
-      .then(() => {
-        res.status(201).json({
-          success: true,
-          id: review._id,
-          message: 'Review created!',
-        });
-      })
-      .catch((error) => {
-        res.status(500).json({
-          success: false,
-          error: 'Server error: Unable to create the review',
-        });
-      });
-  };
-  
-// Get Reviews for a Movie
- getReviewsForMovie = (req, res) => {
-  const { movieID } = req.params;
+createReview = (req, res) => {
+  const body = req.body;
 
-  Review.find({ movieID }, (err, reviews) => {
-    if (err) {
-      return res.status(500).json({
-        success: false,
-        error: 'Server error: Unable to get reviews',
+  if (Object.values(body).length === 0) {
+    return res.status(400).json({
+      success: false,
+      error: "You must provide a review",
+    });
+  }
+
+  const { movieID, userID, rating } = body;
+
+  if (!movieID || !userID || !rating) {
+    return res.status(400).json({
+      success: false,
+      error: "movieID, userID, and rating are required",
+    });
+  }
+
+  const review = new Review(body);
+
+  review
+    .save()
+    .then(() => {
+      res.status(201).json({
+        success: true,
+        id: review._id,
+        message: "Review created!",
       });
-    }
-    res.status(200).json({ success: true, data: reviews });
-  });
+    })
+    .catch((error) => {
+      res.status(500).json({
+        success: false,
+        error: `Server error: Unable to create the review ${error}`,
+      });
+    });
+};
+
+// Get Reviews for a Movie
+getReviewsForMovie = async (req, res) => {
+  if (!IdValidator(req.params.movieID)) {
+    return res.status(400).json({ message: "Id Not valid" });
+  }
+  const movieID = req.params.movieID;
+
+  const reviews = await Review.find({ movieID: movieID });
+  res.status(200).json({ success: true, data: reviews });
+  // (err, reviews) => {
+  //   if (err) {
+  //     return res.status(500).json({
+  //       success: false,
+  //       error: 'Server error: Unable to get reviews',
+  //     });
+  //   }
+
+  // }
 };
 
 // Delete Review
- deleteReview = (req, res) => {
-  const { id } = req.params;
+deleteReview = async (req, res) => {
+  if (!IdValidator(req.params.reviewId)) {
+    return res.status(400).json({ message: "Id Not valid" });
+  }
+  const reviewId = req.params.reviewId;
 
-  Review.findByIdAndDelete(id, (err, review) => {
-    if (err) {
-      return res.status(500).json({
-        success: false,
-        error: 'Server error: Unable to delete the review',
-      });
-    }
-
-    if (!review) {
-      return res.status(404).json({
-        success: false,
-        error: 'Review not found',
-      });
-    }
-
+  const review = await Review.findOneAndDelete({ _id: reviewId });
+  if (review) {
     res.status(200).json({ success: true, data: review });
-  });
+  } else {
+    return res.status(404).json({
+      success: false,
+      error: "Review not found",
+    });
+  }
 };
-
 
 //update review
 updateReview = async (req, res) => {
   const body = req.body;
 
-  if (!body) {
+  if (Object.values(body).length === 0) {
     return res.status(400).json({
       success: false,
-      error: 'You must provide a review',
+      error: "You must provide a review",
     });
   }
+  if (!IdValidator(req.params.id)) {
+    return res.status(400).json({ message: "Id Not valid" });
+  }
 
-  const { id } = req.params;
+  const id = req.params.id;
   const { rating, comment } = body;
 
   if (!rating && !comment) {
     return res.status(400).json({
       success: false,
-      error: 'Rating or comment is required for update',
+      error: "Rating or comment is required for update",
     });
   }
 
-  Review.findOne({ _id: id }, (err, review) => {
-    if (err) {
-      return res.status(404).json({
-        err,
-        message: 'Review not found!',
-      });
-    }
-
+  const review = await Review.findOne({ _id: id });
+  if (review) {
     if (rating) {
       review.rating = rating;
     }
-
     if (comment) {
       review.comment = comment;
     }
-
     review
       .save()
       .then(() => {
         return res.status(200).json({
           success: true,
           id: review._id,
-          message: 'Review updated!',
+          message: "Review updated!",
         });
       })
       .catch((error) => {
         return res.status(404).json({
           error,
-          message: 'Review not updated!',
+          message: "Review not updated!",
         });
       });
-  });
+  } else {
+    return res.status(404).json({
+      message: "Review not found!",
+    });
+  }
 };
-
 
 module.exports = {
   createReview,
@@ -144,4 +140,7 @@ module.exports = {
   deleteReview,
   updateReview,
 };
-
+(err, review) => {
+  if (err) {
+  }
+};

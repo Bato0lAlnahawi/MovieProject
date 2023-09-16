@@ -16,4 +16,8 @@ const loginValidation = (body) => {
     return error
 }
 
-module.exports = { registerValidation,loginValidation }
+const IdValidator = (id)=> {
+    return id.length == 24;
+}
+
+module.exports = { registerValidation,loginValidation ,IdValidator}

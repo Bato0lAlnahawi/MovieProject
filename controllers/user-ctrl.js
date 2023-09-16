@@ -1,8 +1,7 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
-const { registerValidation, loginValidation } = require("../utils/validator");
+const { registerValidation, loginValidation, } = require("../utils/validator");
 
 const saltRounds = 10;
 
