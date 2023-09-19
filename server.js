@@ -10,6 +10,8 @@ const db = require("./models/db");
 const MovieRouter = require("./routes/movieRouter");
 const UserRouter = require("./routes/userRouter");
 const ReviewRouter = require("./routes/reviewRouter");
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger');
 //db().catch(err => console.log(err));
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -21,8 +23,10 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
-//middleware.checkAuthUser
-app.use("/api", MovieRouter);
-app.use("/api", ReviewRouter);
-app.use("/api", UserRouter);
+
+app.use("/api/movies",middleware.checkAuthUser, MovieRouter);
+app.use("/api/Review/",middleware.checkAuthUser, ReviewRouter);
+app.use("/api/auth", UserRouter);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 app.listen(apiPort, () => console.log(`Server running on port ${apiPort}`));
