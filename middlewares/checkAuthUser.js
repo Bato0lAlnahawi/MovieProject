@@ -8,14 +8,13 @@ const checkAuthUser = (req, res, next) => {
     }
 
 
-    const isVerifed = jwt.verify(token, 'KEY-SECRET')
-
-
-    if(!isVerifed){
+    try {
+        const isVerified = jwt.verify(token, 'secret');
+        next();
+    } catch (error) {
         return res.status(401).json({ message: 'not auth'})
     }
 
-    next()
 
 }
 

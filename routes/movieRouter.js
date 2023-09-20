@@ -9,5 +9,5 @@ router.put('/UpdateMovie/:id', MovieCtrl.updateMovie);
 router.delete('/DeleteMovie/:id', MovieCtrl.deleteMovie);
 router.get('/:id', MovieCtrl.getMovieById);
 router.get('', MovieCtrl.getAllMovies);
-router.get('/movieCreatedByUser/:id',MovieCtrl.getMoiveByAdmin);
+router.get('/movieCreatedByUser/:id',MovieCtrl.getMovieByAdmin);
 module.exports = router;

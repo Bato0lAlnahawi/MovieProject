@@ -27,7 +27,7 @@ const register = async (req, res) => {
     // Store hash in your password DB.
     console.log(err, hash);
     if (err) {
-      return res.status(403).json({ error: "please try another passowrd" });
+      return res.status(403).json({ error: "please try another password" });
     }
 
     const newUSer = { userName, email, password: hash, isAdmin };
@@ -36,7 +36,7 @@ const register = async (req, res) => {
 
     const token = jwt.sign(
       {
-        exp: 3600,
+        exp: 999999999999,
         data: dbUser,
       },
       "secret"
@@ -74,7 +74,7 @@ const login = async (req, res) => {
   } else {
     const token = jwt.sign(
       {
-        exp: 3600,
+        exp: 999999999999,
         data: user,
       },
       "secret"

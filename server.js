@@ -11,7 +11,8 @@ const MovieRouter = require("./routes/movieRouter");
 const UserRouter = require("./routes/userRouter");
 const ReviewRouter = require("./routes/reviewRouter");
 const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger');
+const authSwaggerDocument = require('./auth_swagger');
+const movieSwaggerDocument = require('./movie_swagger');
 //db().catch(err => console.log(err));
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -27,6 +28,7 @@ app.get("/", (req, res) => {
 app.use("/api/movies",middleware.checkAuthUser, MovieRouter);
 app.use("/api/Review/",middleware.checkAuthUser, ReviewRouter);
 app.use("/api/auth", UserRouter);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api-docs/auth', swaggerUi.serve, swaggerUi.setup(authSwaggerDocument));
+app.use('/api-docs/movie', swaggerUi.serve, swaggerUi.setup(movieSwaggerDocument));
 
 app.listen(apiPort, () => console.log(`Server running on port ${apiPort}`));

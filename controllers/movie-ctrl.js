@@ -15,8 +15,8 @@ createMovie = async (req, res) => {
 
   if (findMovie) {
     return res
-      .status(200)
-      .json({ message: "Movie Already exist", moive: findMovie });
+      .status(409)
+      .json({ message: "Movie Already exist", movie: findMovie });
   } else {
     const movie = new Movie(body);
 
@@ -129,7 +129,7 @@ getAllMovies = async (req, res) => {
   }
 };
 // get movie by admin
-getMoiveByAdmin = async (req, res) => {
+getMovieByAdmin = async (req, res) => {
   if (!IdValidator(req.params.id)) {
     return res.status(400).json({ message: "user Id Not valid" });
   }
@@ -144,5 +144,5 @@ module.exports = {
   deleteMovie,
   getMovieById,
   getAllMovies,
-  getMoiveByAdmin,
+  getMovieByAdmin,
 };
